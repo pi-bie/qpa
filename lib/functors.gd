@@ -3,6 +3,7 @@
 # $Id: functors.gd,v 1.7 2012/08/01 16:01:10 sunnyquiver Exp $
 DeclareAttribute( "DualOfModule", IsPathAlgebraMatModule );
 DeclareAttribute( "TransposeOfModule", IsPathAlgebraMatModule );
+DeclareAttribute( "TransposeOfModuleHomomorphism", IsPathAlgebraMatModuleHomomorphism );
 DeclareAttribute( "DTr", IsPathAlgebraMatModule );
 DeclareAttribute( "TrD", IsPathAlgebraMatModule );
 DeclareSynonym("DualOfTranspose", DTr);
