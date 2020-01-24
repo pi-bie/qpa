@@ -319,6 +319,61 @@ end
 
 #######################################################################
 ##
+#A  TransposeOfModuleHomomorphism( <h> )
+##
+##  This function takes as an argument a homomorphism <h> between
+##  two modules M1 and M2 over an algebra A and computes the transpose
+##  of that homomorphism, i.e. the induced homomorphism from the
+##  module Tr(M2) to the module Tr(M1) over the opposite of A.
+##
+InstallMethod( TransposeOfModuleHomomorphism,
+    "for a path matrix",
+    [ IsPathAlgebraMatModuleHomomorphism  ],
+
+    function( h )
+    local A, M1, M2, d0, kerd0, d1prime, d1, d0_2, kerd0_2, d1prime_2,
+          d1_2, h0, h1prime, h1, map;
+    #
+    # Finding the source  and range of homomorphism h and setting up
+    # the neccessary infrastructure.
+    #
+    M1 := Source(h);
+    M2 := Range(h);
+    A := ActingAlgebra(M1);
+    #
+    # Calculating the first two stages of a projective resolution
+    # of the source and range of the original homomorphism.
+    #
+    d0 := ProjectiveCover(M1);
+    kerd0 := KernelInclusion(d0);
+    d1prime := ProjectiveCover(Source(kerd0));
+    d1 := d1prime * kerd0;
+    d0_2 := ProjectiveCover(M2);
+    kerd0_2 := KernelInclusion(d0_2);
+    d1prime_2 := ProjectiveCover(Source(kerd0_2));
+    d1_2 := d1prime_2 * kerd0_2;
+    #
+    # Lifting the map h to a map between the stages of the projective
+    # resolution.
+    #
+    h0 := LiftingMorphismFromProjective(d0_2, d0 * h);
+    h1prime := MorphismOnKernel	(d0, d0_2, h0, h);
+    h1 := LiftingMorphismFromProjective(d1prime_2, d1prime * h1prime);
+    #
+    # Find the induced homomorphism on the cokernels, that is
+    # on the transposes of Source and Range
+    #
+    map := MorphismOnCoKernel( StarOfModuleHomomorphism( d1_2 ),
+                              StarOfModuleHomomorphism( d1 ),
+                              StarOfModuleHomomorphism( h0 ),
+                              StarOfModuleHomomorphism( h1 ) );
+
+    return map;
+end;
+)
+
+#######################################################################
+##
 #O  DTr(<M>)
 ##
 ##  This function returns the dual of the transpose of a module <M>,
